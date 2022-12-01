@@ -46,13 +46,9 @@ func main () {
 
 	// find max calories (this resolves Part 1 of the Day 1)
 	max := 0
-	for i, c := range inventory {
-		if i == 0 { 
+	for _, c := range inventory {
+		if c > max {
 			max = c
-		} else {
-			if c > max {
-				max = c
-			}
 		}
 	}
 
