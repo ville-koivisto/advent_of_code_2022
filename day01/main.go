@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 )
 
@@ -44,7 +45,7 @@ func main () {
 		}
 	}
 
-	// find max calories (this resolves Part 1 of the Day 1)
+	// find max calories (resolves Part 1 / Day 1)
 	max := 0
 	for _, c := range inventory {
 		if c > max {
@@ -52,5 +53,13 @@ func main () {
 		}
 	}
 
+	// sum of best three (resolves Part 2 / Day 1)
+	sort.Sort(sort.Reverse(sort.IntSlice(inventory)))
+	maxThree := 0
+	for i := 0; i < 3; i++ {
+		maxThree += inventory[i]
+	}
+
 	fmt.Println(max)
+	fmt.Println(maxThree)
 }
