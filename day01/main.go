@@ -1,9 +1,12 @@
 /*
 Advent of Code: Day 1
 
-Check Elf's inventory and find out the one
-carrying most calories. Inventory is written
-in "inventory.txt".
+Check Elf's inventory and find the one
+carrying most calories. Return max calories
+(part 1). Also find total sum for the best
+of three (part 2).
+
+The inventory is written in "inventory.txt".
 */
 
 package main
