@@ -18,6 +18,7 @@ import (
 
 func main() {
 	countSubsets := 0
+	countOverlaps := 0
 	assigments, err := os.Open("assignment_pairs.txt")
 	if err != nil {
 		log.Fatalln(err)
@@ -27,12 +28,20 @@ func main() {
 	s := bufio.NewScanner(assigments)
 	for s.Scan() {
 		rawPair := s.Text()
+
+		// part 1
 		elf1, elf2 := getRanges(rawPair)
 		if isSubset(elf1, elf2) || isSubset(elf2, elf1) {
 			countSubsets += 1
 		}
+
+		// part 2
+		if overlap(elf1, elf2) {
+			countOverlaps += 1
+		}
 	}
 	fmt.Println(countSubsets)
+	fmt.Println(countOverlaps)
 }
 
 
@@ -75,4 +84,15 @@ func isSubset(first, second []int) bool {
         }
     }
     return true
+}
+
+func overlap(a, b []int) bool {
+	for _, v1 := range a {
+		for _, v2 := range b {
+			if v1 == v2 {
+				return true
+			}
+		}
+	}
+	return false
 }
