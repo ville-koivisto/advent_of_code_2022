@@ -2,6 +2,7 @@
 Advent of Code: Day 3
 
 Get the sum of priority values (part 1).
+Get the sum of badge priority values (per group of three Elfs) (part 2).
 
 */
 
@@ -60,7 +61,7 @@ func main() {
 			elfGroup = []string{}
 		}
 	}
-	
+
 	fmt.Println(prioritySum)
 	fmt.Println(badgeSum)
 }
@@ -82,7 +83,6 @@ func getPriorityValue(item string, items []byte) (int, error) {
 		if item == fmt.Sprintf("%v",v) {
 			return i+1, nil
 		}
-
 	}
 	return 0, fmt.Errorf("invalid value for an item")
 }
