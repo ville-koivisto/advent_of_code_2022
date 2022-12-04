@@ -19,6 +19,8 @@ import (
 func main() {
 	items := fillItems()
 	prioritySum := 0
+	elfGroup := []string{}
+	badgeSum := 0
 
 	r, err := os.Open("rucksacks.txt")
 	if err != nil {
@@ -28,6 +30,7 @@ func main() {
 
 	s := bufio.NewScanner(r)
 	for s.Scan() {
+		// part 1
 		comp1, comp2 := []rune{}, []rune{}
 		rucksack := s.Text()
 		cap := len(rucksack)
@@ -44,8 +47,22 @@ func main() {
 			log.Fatal(err)
 		}
 		prioritySum += value
+
+		// part 2
+		elfGroup = append(elfGroup, rucksack)
+		if len(elfGroup) == 3 {
+			badge := fmt.Sprintf("%v", intersect.Hash(elfGroup[0], intersect.Hash(elfGroup[1], elfGroup[2]))[0])
+			value, err := getPriorityValue(badge, items)
+			if err != nil {
+				log.Fatal(err)
+			}
+			badgeSum += value
+			elfGroup = []string{}
+		}
 	}
+	
 	fmt.Println(prioritySum)
+	fmt.Println(badgeSum)
 }
 
 func fillItems() []byte {
