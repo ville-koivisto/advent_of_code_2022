@@ -19,9 +19,8 @@ import (
 
 func main() {
 	items := fillItems()
-	prioritySum := 0
+	prioritySum, badgeSum := 0, 0
 	elfGroup := []string{}
-	badgeSum := 0
 
 	r, err := os.Open("rucksacks.txt")
 	if err != nil {
