@@ -1,7 +1,8 @@
 /*
 Advent of Code: Day 4
 
-Check how many pairs overlap fully (part 1).
+Check how many of the assignments are a subset of eachother (part 1)
+and how many of them overlap at all (part 2).
 
 */
 
@@ -17,8 +18,7 @@ import (
 )
 
 func main() {
-	countSubsets := 0
-	countOverlaps := 0
+	var subsets, overlaps int
 	assigments, err := os.Open("assignment_pairs.txt")
 	if err != nil {
 		log.Fatalln(err)
@@ -32,16 +32,16 @@ func main() {
 		// part 1
 		elf1, elf2 := getRanges(rawPair)
 		if isSubset(elf1, elf2) || isSubset(elf2, elf1) {
-			countSubsets += 1
+			subsets += 1
 		}
 
 		// part 2
 		if overlap(elf1, elf2) {
-			countOverlaps += 1
+			overlaps += 1
 		}
 	}
-	fmt.Println(countSubsets)
-	fmt.Println(countOverlaps)
+	fmt.Println(subsets)
+	fmt.Println(overlaps)
 }
 
 
