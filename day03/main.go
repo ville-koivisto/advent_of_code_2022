@@ -1,9 +1,7 @@
 /*
 Advent of Code: Day 3
 
-- Rucksack has two compartments
-- Each type in only one compartment
--
+Get the sum of priority values (part 1).
 
 */
 
@@ -14,13 +12,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/juliangruber/go-intersect"
 )
 
 func main() {
 	items := fillItems()
-	// priorities := []int{}
-	fmt.Println(items)
-	fmt.Println(getPriority('A', items))
+	prioritySum := 0
 
 	r, err := os.Open("rucksacks.txt")
 	if err != nil {
@@ -40,17 +38,14 @@ func main() {
 				comp2 = append(comp2, item)
 			}
 		}
-		fmt.Println("Rucksack:", comp1, comp2)
+		c := fmt.Sprintf("%v", intersect.Hash(comp1, comp2)[0])
+		value, err := getPriorityValue(c, items)
+		if err != nil {
+			log.Fatal(err)
+		}
+		prioritySum += value
 	}
-
-	/* TODO:
-	- lue rivi
-	- jaa kahteen yhtä suureen osaan
-	- talleta osat omiin slice-rakenteisiin
-	- hae intersektio
-	- har intersektion arvolle priority
-	- summaa priority muuttujaan
-	*/
+	fmt.Println(prioritySum)
 }
 
 func fillItems() []byte {
@@ -65,11 +60,12 @@ func fillItems() []byte {
 	return items
 }
 
-func getPriority(item byte, items []byte) (int, error) {
+func getPriorityValue(item string, items []byte) (int, error) {
 	for i, v := range items {
-		if v == item {
+		if item == fmt.Sprintf("%v",v) {
 			return i+1, nil
 		}
+
 	}
-	return 0, fmt.Errorf("item not in rucksack")
+	return 0, fmt.Errorf("invalid value for an item")
 }
