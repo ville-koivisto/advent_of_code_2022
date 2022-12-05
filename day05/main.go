@@ -2,7 +2,8 @@
 Advent of Code: Day 5
 
 After the crane has made the moves, find out what crates
-end up on top of each of the three stacks (part 1).
+end up on top of each of the three stacks (part 1). Do
+the same drill but with CrateMover 9001 (part 2).
 
 */
 
@@ -18,18 +19,7 @@ import (
 )
 
 func main() {
-	stacks := [][]byte{
-		{'S','C','V','N'},
-		{'Z','M','J','H','N','S'},
-		{'M','C','T','G','J','N','D'},
-		{'T','D','F','J','W','R','M'},
-		{'P','F','H'},
-		{'C','T','Z','H','J'},
-		{'D','P','R','Q','F','S','L','Z'},
-		{'C','S','L','H','D','F','P','W'},
-		{'D','S','M','P','F','N','G','Z'},
-	}
-
+	part1, part2 := getStacks(), getStacks()
 	m, err := os.Open("moves.txt")
 	if err != nil {
 		log.Fatalln(err)
@@ -43,19 +33,50 @@ func main() {
 		m, _ := strconv.Atoi(move)
 		o, _ := strconv.Atoi(origin)
 		d, _ := strconv.Atoi(destination)
-		stacks = addToDestination(stacks, m, o, d)
+
+		// part 1
+		part1 = addAndRemovePart1(part1, m, o, d)
+		
+		// part 2
+		part2 = addAndRemovePart2(part2, m, o, d)
 	}
-	
-	// part 1
-	getLetters(stacks)
+	getLetters(part1)
+	getLetters(part2)
 }
 
-func addToDestination(s [][]byte, m int, o int, d int) [][]byte {
+func getStacks() [][]byte {
+	stacks := [][]byte{
+		{'S','C','V','N'},
+		{'Z','M','J','H','N','S'},
+		{'M','C','T','G','J','N','D'},
+		{'T','D','F','J','W','R','M'},
+		{'P','F','H'},
+		{'C','T','Z','H','J'},
+		{'D','P','R','Q','F','S','L','Z'},
+		{'C','S','L','H','D','F','P','W'},
+		{'D','S','M','P','F','N','G','Z'},
+	}
+	return stacks
+}
+
+func addAndRemovePart1(s [][]byte, m int, o int, d int) [][]byte {
 	orig, dest := o-1, d-1
 	for i := range s[orig] {
 		if len(s[orig])-1-i > len(s[orig])-1-m {
 			s[dest] = append(s[dest], s[orig][len(s[orig])-1-i])
 		}
+	}
+	s = removeFromOrigin(s, m, o)
+	return s
+}
+
+func addAndRemovePart2(s [][]byte, m int, o int, d int) [][]byte {
+	orig, dest := o-1, d-1
+	if m == 1 {
+		s[dest] = append(s[dest], s[orig][len(s[orig])-1])
+	} else {
+		crates := s[orig][len(s[orig])-m:]
+		s[dest] = append(s[dest], crates...)
 	}
 	s = removeFromOrigin(s, m, o)
 	return s
