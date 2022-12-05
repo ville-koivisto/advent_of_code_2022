@@ -13,33 +13,23 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
-type allStacks struct {
-	st1 []byte
-	st2 []byte
-	st3 []byte
-	st4 []byte
-	st5 []byte
-	st6 []byte
-	st7 []byte
-	st8 []byte
-	st9 []byte
-}
-
-var stacks = allStacks{
-[]byte{'S','C','V','N'},
-[]byte{'Z','M','J','H','N','S'},
-[]byte{'M','C','T','G','J','N','D'},
-[]byte{'T','D','F','J','W','R','M'},
-[]byte{'P','F','H'},
-[]byte{'C','T','Z','H','J'},
-[]byte{'D','P','R','Q','F','S','L','Z'},
-[]byte{'C','S','L','H','D','F','P','W'},
-[]byte{'D','S','M','P','F','N','G','Z'},
-}
-
 func main() {
+	stacks := [][]byte{
+		{'S','C','V','N'},
+		{'Z','M','J','H','N','S'},
+		{'M','C','T','G','J','N','D'},
+		{'T','D','F','J','W','R','M'},
+		{'P','F','H'},
+		{'C','T','Z','H','J'},
+		{'D','P','R','Q','F','S','L','Z'},
+		{'C','S','L','H','D','F','P','W'},
+		{'D','S','M','P','F','N','G','Z'},
+	}
+
 	m, err := os.Open("moves.txt")
 	if err != nil {
 		log.Fatalln(err)
@@ -48,18 +38,39 @@ func main() {
 
 	s := bufio.NewScanner(m)
 	for s.Scan() {
-		rawMove := s.Text()
-		fmt.Println(rawMove)
+		splitMoves := strings.Fields(s.Text())
+		move, origin, destination := splitMoves[1], splitMoves[3], splitMoves[5]
+		m, _ := strconv.Atoi(move)
+		o, _ := strconv.Atoi(origin)
+		d, _ := strconv.Atoi(destination)
+		stacks = addToDestination(stacks, m, o, d)
 	}
-	fmt.Println(stacks)
+	
+	// part 1
+	getLetters(stacks)
 }
 
-/* TODO:
-- parsi syötteestä
-	- kuinka monta konttia siirretään
-	- lähde
-	- kohde
-- toteuta algoritmi
-	- firt in last out
+func addToDestination(s [][]byte, m int, o int, d int) [][]byte {
+	orig, dest := o-1, d-1
+	for i := range s[orig] {
+		if len(s[orig])-1-i > len(s[orig])-1-m {
+			s[dest] = append(s[dest], s[orig][len(s[orig])-1-i])
+		}
+	}
+	s = removeFromOrigin(s, m, o)
+	return s
+}
 
-*/
+func removeFromOrigin(s [][]byte, m int, o int) [][]byte {
+	orig := o-1
+	s[orig] = s[orig][:len(s[orig])-m]
+	return s
+}
+
+func getLetters(s [][]byte) {
+	for i := range s {
+		c := string(s[i][len(s[i])-1])
+		fmt.Print(c)
+	}
+	fmt.Println()
+}
