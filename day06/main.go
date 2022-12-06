@@ -25,19 +25,20 @@ func main() {
 
 	s := bufio.NewScanner(d)
 	for s.Scan() {
+		packetFound := false
 		data := s.Text()
 		for i := range data {
-			if isMarker(data, i, 3) {
-				fmt.Printf("Start marker end (packet) found at char: %v\n", i+4)
-				break
+			if !packetFound {
+				if isMarker(data, i, 3) {
+					fmt.Printf("Packet marker end at: %v\n", i+4)
+					packetFound = true
+				}
 			}
-		}
-		for i := range data {
 			if isMarker(data, i, 13) {
-				fmt.Printf("Start marker end (message) found at char: %v\n", i+14)
-				os.Exit(0)
-			}
-		}
+				fmt.Printf("Message marker end at: %v\n", i+14)
+				break
+			} 
+		}				
 	}
 }
 
