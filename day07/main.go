@@ -12,9 +12,15 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
+	rootDir := "/"
+	parentDir := ""
+	currentDir :=""
+	dirTree := make(map[string][]int)
+	
 	i, err := os.Open("input.txt")
 	if err != nil {
 		log.Fatalln(err)
@@ -24,6 +30,19 @@ func main() {
 	s := bufio.NewScanner(i)
 	for s.Scan() {
 		line := s.Text()
-						
+		cd := changeDir(line)
+		if cd != "" {
+			// TODO: continue from here
+		}
+
 	}
+}
+
+func changeDir(cmd string ) string {
+	if strings.Contains(cmd, "$ cd") {
+		parseCmd := strings.Fields(cmd)
+		moveTo := parseCmd[2]
+		return moveTo
+	}
+	return ""
 }
